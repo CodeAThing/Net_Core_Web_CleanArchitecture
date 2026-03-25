@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace App.Repositories
+namespace App.Repositories.Products
 {
     public class Product
     {
