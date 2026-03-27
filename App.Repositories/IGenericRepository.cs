@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Repositories
 {
-    internal interface IGenericRepository<T> where T: class // Tüm entity'ler için ortak CRUD işlemlerini tek tek yazmak yerine,
+    public interface IGenericRepository<T> where T: class // Tüm entity'ler için ortak CRUD işlemlerini tek tek yazmak yerine,
                                                             // generic bir repository sözleşmesi tanımlıyoruz.
     {
         IQueryable<T> GetAll(); //Sorguya sonradan filtreleme, sıralama ve sayfalama ekleyebilmek için IQueryable döndürüyoruz

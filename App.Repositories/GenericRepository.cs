@@ -10,14 +10,15 @@ namespace App.Repositories
 {
     public class GenericRepository<T>(AppDbContext context) : IGenericRepository<T> where T : class
     {
-        private readonly DbSet<T> _dbSet=context.Set<T>();
+        protected readonly AppDbContext Context = context;
+        private readonly DbSet<T> _dbSet = context.Set<T>();
 
         public async ValueTask AddAsync(T entity) => await _dbSet.AddAsync(entity);
 
 
         public void Delete(T entity)
         {
-          _dbSet.Remove(entity);
+            _dbSet.Remove(entity);
         }
 
         public IQueryable<T> GetAll() => _dbSet.AsQueryable().AsNoTracking(); //track etmesin istiyoruz.
@@ -28,7 +29,5 @@ namespace App.Repositories
         }
 
         public IQueryable<T> Where(Expression<Func<T, bool>> predicate) => _dbSet.Where(predicate).AsNoTracking(); //bunu tekrar et.
-
-       
     }
 }
