@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using App.Repositories.Products;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +22,12 @@ namespace App.Repositories.Extensions
                         sqlServerOptionsAction.MigrationsAssembly(typeof(RepositoryAssembly).Assembly.FullName);
                     });
             });
-            return services;
+            
+                services.AddScoped<IProductRepository,ProductRepository>(); //singleton kullanmıyoruz burda. Dbcontext zaten scoped
+                                                                            //(efcoreda)
+           services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>)); //Eğer IGenericRepository, birden fazla t1,t2 alsaydı
+            return services;                                                              //Burada IGenericREpo<,> şeklinde virgül koyacaktık.
+
         }
     }
 }
