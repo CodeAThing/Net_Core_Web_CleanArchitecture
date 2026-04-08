@@ -15,14 +15,19 @@ namespace App.API.Controllers
         //burda(yukarıda) productResult'a 
         //serviceResult geldiği için products     
         //yerine serviceResult diye isimlendirdim.
-       [HttpGet]
+
+        [HttpGet("{pageSize}/{pageNumber}")]
+        public async Task<IActionResult> GetPagedAll(int pageNumber,int pageSize)
+            => CreateActionResult(await productService.GetPagedAllListAsync(pageNumber,pageSize));
+
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)=>CreateActionResult(await productService.GetByIdAsync(id));
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductRequest request) =>CreateActionResult(await productService.CreateAsync(request));
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateProductRequest request) => CreateActionResult(await productService.UpdateAsync(id, request));
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)=>CreateActionResult(await productService.DeleteAsync(id));
         
     }

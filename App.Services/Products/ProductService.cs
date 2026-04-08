@@ -28,11 +28,22 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
 
         return ServiceResult<List<ProductDto>>.Success(productsAsDto!);
     }
+    public async Task<ServiceResult<List<ProductDto>>> GetPagedAllListAsync(int pageNumber,int pageSize)
+    {
+         //pageNumber - pageSize
+         //    1      -    10 =>ilk 10 kayıt skip(0).Take(10)
+         //    2      -    10 => 11-20 kayıt skip(10).Take(10)
+         //...
+         int skip=(pageNumber-1)*pageSize;
+        var products=await productRepository.GetAll().Skip(skip).Take(pageSize).ToListAsync();
+        var productsAsDto = products.Select(p=>new ProductDto(p.Id,p.Name,p.Price,p.Stock)).ToList();
+        return ServiceResult<List<ProductDto>>.Success(productsAsDto);
+    }
     public async Task<ServiceResult<ProductDto?>> GetByIdAsync(int id)
     {
         var product = await productRepository.GetByIdAsync(id);
 
-        if (product is null)
+        if (product is null)    
         {
             ServiceResult<ProductDto>.Fail("Product not found", System.Net.HttpStatusCode.NotFound);
         }
