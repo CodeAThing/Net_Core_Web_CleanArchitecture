@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
+using System.Text.Json.Serialization;
 
 namespace App.Services
 {
@@ -8,11 +9,12 @@ namespace App.Services
          //bu 2 property de nullable olmalı. Çünkü ya başarılı ya başarısız değer döndüreceğiz. İkisini de döndürmeyeceğiz.
         public T?Data { get; set; }
         public List<string>? ErrorMessage { get; set; }//Birden fazla hata mesajımız olabilir
+        [JsonIgnore]
         public bool IsSuccess=> ErrorMessage == null || ErrorMessage.Count == 0; //sadece geti olan bir property.
-
+        [JsonIgnore]
         public bool IsFail => !IsSuccess; //Successin tersi 
 
-        public HttpStatusCode Status {  get; set; }
+        [JsonIgnore] public HttpStatusCode Status {  get; set; }
 
         public static ServiceResult<T> Success(T data,HttpStatusCode status=HttpStatusCode.OK)
         {
@@ -45,11 +47,11 @@ namespace App.Services
     public class ServiceResult
     {
        
-        public List<string>? ErrorMessage { get; set; }
-        public bool IsSuccess => ErrorMessage == null || ErrorMessage.Count == 0;
+        public List<string>? ErrorMessage { get; set; } 
+        [JsonIgnore] public bool IsSuccess => ErrorMessage == null || ErrorMessage.Count == 0;
 
-        public bool IsFail => !IsSuccess; 
-
+        [JsonIgnore] public bool IsFail => !IsSuccess;
+        [JsonIgnore]
         public HttpStatusCode Status { get; set; }
 
         public static ServiceResult Success( HttpStatusCode status = HttpStatusCode.OK)
